@@ -3,10 +3,8 @@ import pickle
 import pandas as pd
 import requests
 
-# Page configuration
 st.set_page_config(page_title="🎬 Movie Recommender", layout="wide")
 
-# --- Custom CSS ---
 st.markdown("""
     <style>
     .main {
@@ -42,7 +40,6 @@ st.markdown("""
         color: black;
         margin-top: 8px;
         line-height: 1.2em;
-        /* Prevent line breaks inside words */
         word-wrap: break-word;
         hyphens: auto;
         white-space: normal;
@@ -66,7 +63,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Function to fetch poster URL ---
 def fetch_poster(movie_id):
     url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key=0b8a27233ceec2b9a3bff51e42a261c8&language=en-US'
     response = requests.get(url)
@@ -77,7 +73,6 @@ def fetch_poster(movie_id):
     else:
         return "https://via.placeholder.com/154x231?text=No+Poster"
 
-# --- Recommendation function ---
 def recommend(movie):
     movie_index = movies[movies['title'] == movie].index[0]
     distances = similarity[movie_index]
@@ -93,19 +88,15 @@ def recommend(movie):
 
     return recommended_movies, recommended_posters
 
-# --- Load data ---
 movie_dict = pickle.load(open('movie_dict.pkl', 'rb'))
 movies = pd.DataFrame(movie_dict)
 similarity = pickle.load(open('similarity.pkl', 'rb'))
 
-# --- Title & subtitle ---
 st.markdown('<div class="header-title">🎥 Movie Recommender</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Find movies similar to your favorite one!</div>', unsafe_allow_html=True)
 
-# --- Movie selection ---
 selected_movie = st.selectbox("Select a movie:", movies['title'].values)
 
-# --- Recommend button & display ---
 if st.button("Recommend"):
     names, posters = recommend(selected_movie)
 
@@ -124,3 +115,4 @@ if st.button("Recommend"):
                 """,
                 unsafe_allow_html=True
             )
+
